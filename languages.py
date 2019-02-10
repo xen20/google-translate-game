@@ -1,3 +1,5 @@
+from beautifultable import BeautifulTable
+
 LANGUAGES = {
     'af': 'afrikaans',
     'sq': 'albanian',
@@ -107,7 +109,25 @@ LANGUAGES = {
     'he': 'Hebrew'
 }
 
-
 def print_available_languages():
-    for language_key in LANGUAGES:
-        print(('{:<6}' '{:<20}').format(language_key, LANGUAGES[language_key]))
+    language_keys_list = list(LANGUAGES.keys())
+    language_values_list = list(LANGUAGES.values())
+
+    # pad the lists for easier table manipulation by using modulus for decision when to put new column
+    # 110 is divisible by 10 w/o remainder, 106 values in key_list/value list
+
+    language_keys_list += [''] * (111 - len(language_keys_list))
+    language_values_list += [''] * (111 - len(language_values_list))
+
+    language_table = BeautifulTable(max_width=1000)
+    language_table.set_style(BeautifulTable.STYLE_COMPACT)
+
+    for idx in range(1, len(language_keys_list)):
+        if idx % 10 == 0:
+            sliced_keys_list = language_keys_list[idx-10:idx]
+            sliced_values_list = language_values_list[idx-10:idx]
+
+            language_table.append_column("Code", sliced_keys_list)
+            language_table.append_column("Language", sliced_values_list)
+
+    print(language_table)
