@@ -6,7 +6,9 @@ import argparse
 import os
 import sys
 import datetime
+
 import languages
+import voice_synth
 
 from pathlib import Path
 from shutil import rmtree
@@ -20,8 +22,10 @@ def parse_arguments():
                                                     twirling between different languages and language families.
                                                     Takes text directly from the commandline or from a .txt file""")
 
-    parser.add_argument("text_or_path", help="A block of text to translate or path to .txt file.", type=str, nargs='?', metavar="[SOURCE]")
-    parser.add_argument("target_language", help="Desired language to translate to.", type=str, nargs='?', metavar="[LANGUAGE]")
+    parser.add_argument("text_or_path", help="A block of text to translate or path to .txt file.", \
+                        type=str, nargs='?', metavar="[SOURCE]")
+    parser.add_argument("target_language", help="Desired language to translate to.", \
+                        type=str, nargs='?', metavar="[LANGUAGE]")
     parser.add_argument('-l', "--language_help", help="Print all usable languages.", action="store_true")
     parser.add_argument('-rm', '--remove_results', help="Remove result folder and its contents", action="store_true")
 
@@ -72,6 +76,7 @@ def write_results_file(text_block):
 
     finally:
         file.close()
+
 
 def remove_results_folder():
     if os.path.exists("results"):
@@ -133,7 +138,6 @@ def main():
         input_stream = args.text_or_path
         iteration_counter = 1
 
-        text_to_translate = []
         target_language = args.target_language
 
         if input_type == "textblock":
@@ -148,6 +152,7 @@ def main():
         translated = translate(text_to_translate, target_language)
 
         print(translated)
+        voice_synth.say_text(translated, target_language)
         new_translation = translated
 
         while True:
@@ -168,6 +173,7 @@ def main():
                     new_translation = translate(new_translation, target_language)
 
                     print(new_translation)
+                    voice_synth.say_text(new_translation, target_language)
                     print("iterations: ", iteration_counter)
 
                     if iteration_counter == 20:
