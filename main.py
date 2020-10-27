@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-# Remember to push program through pylint later
-
 import argparse
 import os
 import sys
