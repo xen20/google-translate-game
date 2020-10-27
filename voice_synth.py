@@ -1,5 +1,18 @@
 import gtts
+import sys, os
+
+
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
+
+
+def enablePrint():
+    sys.stdout = sys.__stdout__
+
+blockPrint()
 import pygame
+enablePrint()
+
 from io import BytesIO
 
 
